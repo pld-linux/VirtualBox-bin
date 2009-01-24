@@ -1,21 +1,25 @@
 #
+%bcond_without  dist_kernel     # without distribution kernel
+%bcond_without  kernel          # don't build kernel module
+%bcond_without  userspace       # don't build userspace package
+%bcond_with     verbose 	# verbose kernel mod build
 
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-
+%define		rel	0.9
 %ifarch %{x8664}
 %define		arch	amd64
 %else
 %define		arch	x86
 %endif
 
-%define		prev	39760
+%define		prev	41885
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	2.0.6
-Release:	0.9
+Version:	2.1.2
+Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 #Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
@@ -25,8 +29,13 @@ NoSource:	0
 #Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 Source1:	UserManual.pdf
 # Source1-md5:	691682f681a8289cac7f9b1f550b94a0
-Source2:	%{pname}.desktop
-Source3:	%{pname}.sh
+Source3:        %{pname}-vboxdrv.init
+Source4:        %{pname}-vboxadd.init
+Source5:        %{pname}-vboxnetflt.init
+Source6:        %{pname}-vboxvfs.init
+Source7:        %{pname}.desktop
+Source8:        %{pname}.sh
+
 URL:		http://www.virtualbox.org/
 BuildRequires:	ffmpeg-libs
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -79,46 +88,203 @@ wirtualnych są w całości przechowywane w XML-u i są niezależne od
 lokalnej maszyny. Dzięki temu można szybko i łatwo przenieść
 konfigurację maszyny wirtualnej na inny komputer.
 
+%package udev
+Summary:	udev rules for VirtualBox OSE kernel modules
+Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla VirtualBoksa
+Release:	%{rel}
+Group:		Base/Kernel
+Requires:	udev-core
+
+%description udev
+udev rules for VirtualBox OSE kernel modules.
+
+%description udev -l pl.UTF-8
+Reguły udev dla modułów jądra Linuksa dla VirtualBoksa.
+
+%package -n kernel%{_alt_kernel}-misc-vboxadd
+Summary:	VirtualBox OSE Guest Additions for Linux Module
+Summary(pl.UTF-8):	Moduł jądra Linuksa dla VirtualBoksa OSE
+Release:	%{rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+Requires(post,postun):	/sbin/depmod
+Requires:	dev >= 2.9.0-7
+%if %{with dist_kernel}
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
+%endif
+Provides:	kernel(vboxadd) = %{version}-%{rel}
+
+%description -n kernel%{_alt_kernel}-misc-vboxadd
+VirtualBox OSE Guest Additions for Linux Module.
+
+%description -n kernel%{_alt_kernel}-misc-vboxadd -l pl.UTF-8
+Moduł jądra Linuksa vboxadd dla VirtualBoksa OSE - dodatki dla
+systemu gościa.
+
+%package -n kernel%{_alt_kernel}-misc-vboxdrv
+Summary:	VirtualBox OSE Support Driver
+Summary(pl.UTF-8):	Moduł jądra Linuksa dla VirtualBoksa OSE
+Release:	%{rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+Requires(post,postun):	/sbin/depmod
+Requires:	dev >= 2.9.0-7
+%if %{with dist_kernel}
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
+%endif
+Provides:	kernel(vboxdrv) = %{version}-%{rel}
+
+%description -n kernel%{_alt_kernel}-misc-vboxdrv
+VirtualBox OSE Support Driver.
+
+%description -n kernel%{_alt_kernel}-misc-vboxdrv -l pl.UTF-8
+Moduł jądra Linuksa dla VirtualBoksa OSE - sterownik wsparcia dla
+systemu głównego.
+
+%package -n kernel%{_alt_kernel}-misc-vboxnetflt
+Summary:	VirtualBox OSE Guest Additions for Linux Module
+Summary(pl.UTF-8):	Moduł jądra Linuksa dla VirtualBoksa OSE
+Release:	%{rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+Requires(post,postun):	/sbin/depmod
+Requires:	dev >= 2.9.0-7
+Requires:	kernel%{_alt_kernel}-misc-vboxdrv
+%if %{with dist_kernel}
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
+%endif
+Provides:	kernel(vboxnetflt) = %{version}-%{rel}
+
+%description -n kernel%{_alt_kernel}-misc-vboxnetflt
+VirtualBox OSE Network Filter Driver.
+
+%description -n kernel%{_alt_kernel}-misc-vboxnetflt -l pl.UTF-8
+Moduł jądra Linuksa dla VirtualBoksa OSE - sterownik filtrowania
+sieci dla systemu głównego.
+
+%package -n kernel%{_alt_kernel}-misc-vboxvfs
+Summary:	Host file system access VFS for VirtualBox OSE
+Summary(pl.UTF-8):	Moduł jądra Linuksa dla VirtualBoksa OSE
+Release:	%{rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+Requires(post,postun):	/sbin/depmod
+Requires:	dev >= 2.9.0-7
+Requires:	kernel%{_alt_kernel}-misc-vboxadd
+%if %{with dist_kernel}
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
+%endif
+Provides:	kernel(vboxvfs) = %{version}-%{rel}
+
+%description -n kernel%{_alt_kernel}-misc-vboxvfs
+Host file system access VFS for VirtualBox OSE.
+
+%description -n kernel%{_alt_kernel}-misc-vboxvfs -l pl.UTF-8
+Moduł jądra Linuksa dla VirtualBoksa OSE - dostęp do plików
+systemu głównego z poziomu systemu gościa.
+
+%package -n xorg-driver-input-vboxmouse
+Summary:	X.org mouse driver for VirtualBox OSE guest OS
+Summary(pl.UTF-8):	Sterownik myszy dla systemu gościa w VirtualBoksie OSE
+Release:	%{rel}
+Group:		X11/Applications
+Requires:	xorg-xserver-server >= 1.0.99.901
+
+%description -n xorg-driver-input-vboxmouse
+X.org mouse driver for VirtualBox OSE guest OS.
+
+%description -n xorg-driver-input-vboxmouse  -l pl.UTF-8
+Sterownik myszy dla systemu gościa w VirtualBoksie.
+
+%package -n xorg-driver-video-vboxvideo
+Summary:	X.org video driver for VirtualBox OSE guest OS
+Summary(pl.UTF-8):	Sterownik grafiki dla systemu gościa w VirtualBoksie OSE
+Release:	%{rel}
+Group:		X11/Applications
+Requires:	xorg-xserver-server >= 1.0.99.901
+
+%description -n xorg-driver-video-vboxvideo
+X.org video driver for VirtualBox OSE guest OS.
+
+%description -n xorg-driver-video-vboxvideo -l pl.UTF-8
+Sterownik grafiki dla systemu gościa w VirtualBoksie OSE.
+
+
+
 %prep
 %setup -qcT
 %{__sh} %{SOURCE0} --noexec --keep
 %{__tar} -jxf install/VirtualBox.tar.bz2
 
+cat <<'EOF' > udev.conf
+KERNEL=="vboxdrv", NAME="%k", GROUP="vbox", MODE="0660"
+KERNEL=="vboxadd", NAME="%k", GROUP="vbox", MODE="0660"
+EOF
+
 install %{SOURCE1} .
-sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE3} > VirtualBox-wrapper.sh
+sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE8} > VirtualBox-wrapper.sh
+
+rm -rf PLD-MODULE-BUILD && mkdir PLD-MODULE-BUILD && cd PLD-MODULE-BUILD
+cp -rdf ../src/* ./
+sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxdrv/Makefile
+sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxnetflt/Makefile
+
+%build
+%if %{with kernel}
+cd PLD-MODULE-BUILD
+%build_kernel_modules -m vboxdrv -C vboxdrv
+%build_kernel_modules -m vboxnetflt -C vboxnetflt
+cd ..
+%endif
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
+%if %{with userspace}
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 install VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-for f in {VBox{Headless,Manage,SDL,SVC,Tunctl,XPCOMIPCD},VirtualBox}; do
+for f in {VBox{Headless,Manage,SDL,SysInfo.sh,SVC,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
 	install $f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/$f
 	ln -s %{_libdir}/VirtualBox/VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/$f
 done
 
-%ifarch %{x8664}
-install VBox*.rel \
-        $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-%endif
+#%ifarch %{x8664}
+#install VBox*.rel \
+#        $RPM_BUILD_ROOT%{_libdir}/VirtualBox
+#%endif
 
-install libVBoxQt*.so.* VBox*.so VirtualBox.so \
+install libVBoxQt*.so.* VBox*.so VirtualBox.so VRDPAuth.so \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 install VBox{DD,DD2}{GC.gc,R0.r0} VMM{GC.gc,R0.r0} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
-cp -a additions components nls $RPM_BUILD_ROOT%{_libdir}/VirtualBox
+cp -a accessible additions components nls rdesktop-vrdp-keymaps $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 install License-7.html $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 install VBox.png $RPM_BUILD_ROOT%{_pixmapsdir}/VBox.png
-install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
+install %{SOURCE7} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
+
+install VirtualBox.chm $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 # required by VBoxFFmpegFB.so
 ln -s %{_libdir}/libavcodec.so.5? $RPM_BUILD_ROOT%{_libdir}/VirtualBox/libavcodec.so.51
 ln -s %{_libdir}/libavformat.so.5? $RPM_BUILD_ROOT%{_libdir}/VirtualBox/libavformat.so.51
+
+install -d $RPM_BUILD_ROOT/etc/udev/rules.d
+install udev.conf $RPM_BUILD_ROOT/etc/udev/rules.d/virtualbox.rules
+%endif
+
+%if %{with kernel}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxdrv
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetflt
+%install_kernel_modules -m PLD-MODULE-BUILD/vboxdrv/vboxdrv -d misc
+%install_kernel_modules -m PLD-MODULE-BUILD/vboxnetflt/vboxnetflt -d misc
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -126,20 +292,66 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 %groupadd -g 221 -r -f vbox
 
+%post
+cat << 'EOF'
+NOTE: You must also install kernel module for this software to work
+  kernel-misc-vboxdrv-%{version}-%{rel}@%{_kernel_ver_str}
+  kernel-desktop-misc-vboxdrv-%{version}-%{rel}@%{_kernel_ver_str}
+  kernel-laptop-misc-vboxdrv-%{version}-%{rel}@%{_kernel_ver_str}
+  kernel-vanilla-misc-vboxdrv-%{version}-%{rel}@%{_kernel_ver_str}
+  etc.
+
+Depending on which kernel brand You use.
+
+EOF
+
 %postun
 if [ "$1" = "0" ]; then
 	%groupremove vbox
 fi
 
+%post	-n kernel%{_alt_kernel}-misc-vboxdrv
+%depmod %{_kernel_ver}
+/sbin/chkconfig --add vboxdrv
+%service vboxdrv restart "VirtualBox OSE driver"
+
+%postun	-n kernel%{_alt_kernel}-misc-vboxdrv
+%depmod %{_kernel_ver}
+
+%preun -n kernel%{_alt_kernel}-misc-vboxdrv
+if [ "$1" = "0" ]; then
+	%service vboxdrv stop
+	/sbin/chkconfig --del vboxdrv
+fi
+
+%post	-n kernel%{_alt_kernel}-misc-vboxnetflt
+%depmod %{_kernel_ver}
+/sbin/chkconfig --add vboxnetflt
+%service vboxdrv restart "VirtualBox OSE Network Filter driver"
+
+%postun	-n kernel%{_alt_kernel}-misc-vboxnetflt
+%depmod %{_kernel_ver}
+
+%preun -n kernel%{_alt_kernel}-misc-vboxnetflt
+if [ "$1" = "0" ]; then
+	%service vboxnetflt stop
+	/sbin/chkconfig --del vboxnetflt
+fi
+
+%if %{with userspace}
 %files
 %defattr(644,root,root,755)
 %doc UserManual.pdf
 %dir %{_libdir}/VirtualBox
+%dir %{_libdir}/VirtualBox/accessible
 %dir %{_libdir}/VirtualBox/additions
 %dir %{_libdir}/VirtualBox/components
 %dir %{_libdir}/VirtualBox/nls
 %attr(755,root,root) %{_bindir}/VBox*
 %attr(755,root,root) %{_bindir}/VirtualBox
+%attr(755,root,root) %{_bindir}/rdesktop-vrdp
+%attr(755,root,root) %{_bindir}/vboxwebsrv
+%attr(755,root,root) %{_bindir}/webtest
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSVC
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxHeadless
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxManage
@@ -148,18 +360,27 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMIPCD
 %attr(755,root,root) %{_libdir}/VirtualBox/VBox*.so
 %attr(755,root,root) %{_libdir}/VirtualBox/libVBox*.so.*
-%ifarch %{x8664}
-%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.rel
-%endif
+%attr(755,root,root) %{_libdir}/VirtualBox/VRDPAuth.so
+#%ifarch %{x8664}
+#%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.rel
+#%endif
 %attr(4755,root,root) %{_libdir}/VirtualBox/VirtualBox
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox-wrapper.sh
+%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.sh
 %attr(755,root,root) %{_libdir}/VirtualBox/libav*.so.*
+%attr(755,root,root) %{_libdir}/VirtualBox/rdesktop-vrdp
+%attr(755,root,root) %{_libdir}/VirtualBox/vboxwebsrv
+%attr(755,root,root) %{_libdir}/VirtualBox/webtest
+# isn't it already packaged somewhere in the system?
+%attr(755,root,root) %{_libdir}/VirtualBox/accessible/libqtaccessiblewidgets.so
 %{_libdir}/VirtualBox/*.gc
 %{_libdir}/VirtualBox/*.r0
 %{_libdir}/VirtualBox/additions/*
 %{_libdir}/VirtualBox/components/*
+%{_libdir}/VirtualBox/rdesktop-vrdp-keymaps
 %{_libdir}/VirtualBox/License-7.html
+%{_libdir}/VirtualBox/VirtualBox.chm
 %lang(ca) %{_libdir}/VirtualBox/nls/*_ca.qm
 %lang(cs) %{_libdir}/VirtualBox/nls/*_cs.qm
 %lang(de) %{_libdir}/VirtualBox/nls/*_de.qm
@@ -185,3 +406,20 @@ fi
 %lang(zh_TW) %{_libdir}/VirtualBox/nls/*_zh_TW.qm
 %{_pixmapsdir}/VBox.png
 %{_desktopdir}/%{pname}.desktop
+
+%files udev
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) /etc/udev/rules.d/virtualbox.rules
+%endif
+
+%if %{with kernel}
+%files -n kernel%{_alt_kernel}-misc-vboxdrv
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/vboxdrv
+/lib/modules/%{_kernel_ver}/misc/vboxdrv.ko*
+
+%files -n kernel%{_alt_kernel}-misc-vboxnetflt
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/vboxnetflt
+/lib/modules/%{_kernel_ver}/misc/vboxnetflt.ko*
+%endif
