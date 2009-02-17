@@ -13,22 +13,22 @@
 %define		arch	x86
 %endif
 
-%define		prev	41885
+%define		prev	42893
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	2.1.2
+Version:	2.1.4
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 #Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
+# NoSource0-md5:	45c689215a37f274b5b4fe8c7cd7b288
 NoSource:	0
-# NoSource0-md5:	dfb62b048a58a14691b93356a5824bec
 #Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 Source1:	UserManual.pdf
-# Source1-md5:	691682f681a8289cac7f9b1f550b94a0
+# Source1-md5:	6d6709fa2a9cb3dfad8c7ad7cd43be32
 Source3:        %{pname}-vboxdrv.init
 Source4:        %{pname}-vboxadd.init
 Source5:        %{pname}-vboxnetflt.init
@@ -37,7 +37,7 @@ Source7:        %{pname}.desktop
 Source8:        %{pname}.sh
 
 URL:		http://www.virtualbox.org/
-BuildRequires:	ffmpeg-libs
+%{?with_userspace:BuildRequires:	ffmpeg-libs}
 BuildRequires:	rpmbuild(macros) >= 1.379
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
