@@ -6,36 +6,34 @@
 
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	0.9
+%define		rel	1
 %ifarch %{x8664}
 %define		arch	amd64
 %else
 %define		arch	x86
 %endif
 
-%define		prev	42893
+%define		prev	45846
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	2.1.4
+Version:	2.2.0
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 #Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
-# NoSource0-md5:	45c689215a37f274b5b4fe8c7cd7b288
 NoSource:	0
 #Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 Source1:	UserManual.pdf
-# Source1-md5:	6d6709fa2a9cb3dfad8c7ad7cd43be32
+# Source1-md5:	e8333e067d76901e39879ef301f545af
 Source3:        %{pname}-vboxdrv.init
 Source4:        %{pname}-vboxadd.init
 Source5:        %{pname}-vboxnetflt.init
 Source6:        %{pname}-vboxvfs.init
 Source7:        %{pname}.desktop
 Source8:        %{pname}.sh
-
 URL:		http://www.virtualbox.org/
 %{?with_userspace:BuildRequires:	ffmpeg-libs}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -233,6 +231,7 @@ sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxnetflt/Makefile
 %if %{with kernel}
 cd PLD-MODULE-BUILD
 %build_kernel_modules -m vboxdrv -C vboxdrv
+cp -a vboxdrv/Module.symvers vboxnetflt/
 %build_kernel_modules -m vboxnetflt -C vboxnetflt
 cd ..
 %endif
@@ -244,23 +243,22 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with userspace}
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_pixmapsdir},%{_desktopdir}} \
-	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
+	$RPM_BUILD_ROOT%{_libdir}/VirtualBox/components
 
 install VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-for f in {VBox{Headless,Manage,SDL,SysInfo.sh,SVC,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
+for f in {VBox{Headless,Manage,Net{AdpCtl,DHCP},SDL,SysInfo.sh,SVC,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
 	install $f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/$f
 	ln -s %{_libdir}/VirtualBox/VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/$f
 done
 
-#%ifarch %{x8664}
-#install VBox*.rel \
-#        $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-#%endif
-
-install libVBoxQt*.so.* VBox*.so VirtualBox.so VRDPAuth.so \
+install libQt*.so.* VBox*.so VirtualBox.so VRDPAuth.so \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 install VBox{DD,DD2}{GC.gc,R0.r0} VMM{GC.gc,R0.r0} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
+
+for f in *.so; do
+	ln -s %{_libdir}/VirtualBox/$f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/components/$f
+done
 
 cp -a accessible additions components nls rdesktop-vrdp-keymaps $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 install License-7.html $RPM_BUILD_ROOT%{_libdir}/VirtualBox
@@ -355,11 +353,13 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSVC
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxHeadless
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxManage
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxNetAdpCtl
+%attr(4755,root,root) %{_libdir}/VirtualBox/VBoxNetDHCP
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxSDL
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxTunctl
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMIPCD
 %attr(755,root,root) %{_libdir}/VirtualBox/VBox*.so
-%attr(755,root,root) %{_libdir}/VirtualBox/libVBox*.so.*
+%attr(755,root,root) %{_libdir}/VirtualBox/libQt*.so.*
 %attr(755,root,root) %{_libdir}/VirtualBox/VRDPAuth.so
 #%ifarch %{x8664}
 #%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.rel
