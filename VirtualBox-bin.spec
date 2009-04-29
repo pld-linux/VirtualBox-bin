@@ -13,12 +13,12 @@
 %define		arch	x86
 %endif
 
-%define		prev	45846
+%define		prev	46594
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	2.2.0
+Version:	2.2.2
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -27,7 +27,7 @@ Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
 #Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 Source1:	UserManual.pdf
-# Source1-md5:	e8333e067d76901e39879ef301f545af
+# Source1-md5:	37573de808ddf2f4e7fe5f46966fbbe6
 Source3:        %{pname}-vboxdrv.init
 Source4:        %{pname}-vboxadd.init
 Source5:        %{pname}-vboxnetflt.init
@@ -248,6 +248,9 @@ install -d \
 install VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 for f in {VBox{Headless,Manage,Net{AdpCtl,DHCP},SDL,SysInfo.sh,SVC,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
 	install $f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/$f
+done
+
+for f in {VBox{Headless,Manage,SDL,VRDP},VirtualBox,rdesktop-vrdp,vboxwebsrv}; do
 	ln -s %{_libdir}/VirtualBox/VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/$f
 done
 
@@ -256,7 +259,7 @@ install libQt*.so.* VBox*.so VirtualBox.so VRDPAuth.so \
 install VBox{DD,DD2}{GC.gc,R0.r0} VMM{GC.gc,R0.r0} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
-for f in *.so; do
+for f in VBox{DDU,REM,RT,VMM,XPCOM}.so; do
 	ln -s %{_libdir}/VirtualBox/$f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/components/$f
 done
 
@@ -349,11 +352,10 @@ fi
 %attr(755,root,root) %{_bindir}/VirtualBox
 %attr(755,root,root) %{_bindir}/rdesktop-vrdp
 %attr(755,root,root) %{_bindir}/vboxwebsrv
-%attr(755,root,root) %{_bindir}/webtest
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSVC
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxHeadless
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxManage
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxNetAdpCtl
+%attr(4755,root,root) %{_libdir}/VirtualBox/VBoxNetAdpCtl
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxNetDHCP
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxSDL
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxTunctl
@@ -381,6 +383,7 @@ fi
 %{_libdir}/VirtualBox/rdesktop-vrdp-keymaps
 %{_libdir}/VirtualBox/License-7.html
 %{_libdir}/VirtualBox/VirtualBox.chm
+%lang(bg) %{_libdir}/VirtualBox/nls/*_bg.qm
 %lang(ca) %{_libdir}/VirtualBox/nls/*_ca.qm
 %lang(cs) %{_libdir}/VirtualBox/nls/*_cs.qm
 %lang(de) %{_libdir}/VirtualBox/nls/*_de.qm
