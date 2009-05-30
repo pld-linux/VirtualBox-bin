@@ -25,5 +25,7 @@ if [ ! -w /dev/vboxdrv ]; then
 	exit 1
 fi
 
+[ "$BINFILE" = "VBoxVRDP" ] && BINFILE="VBoxHeadless"
+
 export LD_LIBRARY_PATH=$VBOXDIR
 exec $VBOXDIR/$BINFILE ${1:+"$@"}
