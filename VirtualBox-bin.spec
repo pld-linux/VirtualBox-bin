@@ -6,7 +6,7 @@
 
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	0.1
+%define		rel	1
 %ifarch %{x8664}
 %define		arch	amd64
 %else
@@ -346,7 +346,10 @@ fi
 %dir %{_libdir}/VirtualBox/additions
 %dir %{_libdir}/VirtualBox/components
 %dir %{_libdir}/VirtualBox/nls
-%attr(755,root,root) %{_bindir}/VBox*
+%attr(755,root,root) %{_bindir}/VBoxHeadless
+%attr(755,root,root) %{_bindir}/VBoxManage
+%attr(755,root,root) %{_bindir}/VBoxSDL
+%attr(755,root,root) %{_bindir}/VBoxVRDP
 %attr(755,root,root) %{_bindir}/VirtualBox
 %attr(755,root,root) %{_bindir}/rdesktop-vrdp
 %attr(755,root,root) %{_bindir}/vboxwebsrv
@@ -358,26 +361,63 @@ fi
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxSDL
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxTunctl
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMIPCD
-%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.so
-%attr(755,root,root) %{_libdir}/VirtualBox/libQt*.so.*
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxDbg.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxDD2.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxDD.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxDDU.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxGuestPropSvc.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxHeadless.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxKeyboard.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxNetDHCP.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhostcrutil.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhosterrorspu.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLrenderspu.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_6.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxRT.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSDL.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSettings.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedClipboard.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedCrOpenGL.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedFolders.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxVMM.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxVRDP.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMC.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOM.so
+%attr(755,root,root) %{_libdir}/VirtualBox/libQtCoreVBox.so.4
+%attr(755,root,root) %{_libdir}/VirtualBox/libQtGuiVBox.so.4
+%attr(755,root,root) %{_libdir}/VirtualBox/libQtNetworkVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/VRDPAuth.so
-#%ifarch %{x8664}
-#%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.rel
-#%endif
 %attr(4755,root,root) %{_libdir}/VirtualBox/VirtualBox
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox-wrapper.sh
-%attr(755,root,root) %{_libdir}/VirtualBox/VBox*.sh
-%attr(755,root,root) %{_libdir}/VirtualBox/libav*.so.*
+%attr(755,root,root) %{_libdir}/VirtualBox/VBox.sh
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSysInfo.sh
+%attr(755,root,root) %{_libdir}/VirtualBox/libavcodec.so.51
+%attr(755,root,root) %{_libdir}/VirtualBox/libavformat.so.51
 %attr(755,root,root) %{_libdir}/VirtualBox/rdesktop-vrdp
 %attr(755,root,root) %{_libdir}/VirtualBox/vboxwebsrv
 %attr(755,root,root) %{_libdir}/VirtualBox/webtest
 # isn't it already packaged somewhere in the system?
 %attr(755,root,root) %{_libdir}/VirtualBox/accessible/libqtaccessiblewidgets.so
-%{_libdir}/VirtualBox/*.gc
-%{_libdir}/VirtualBox/*.r0
-%{_libdir}/VirtualBox/additions/*
-%{_libdir}/VirtualBox/components/*
+%{_libdir}/VirtualBox/VBoxDD2GC.gc
+%{_libdir}/VirtualBox/VBoxDDGC.gc
+%{_libdir}/VirtualBox/VMMGC.gc
+%{_libdir}/VirtualBox/VBoxDD2R0.r0
+%{_libdir}/VirtualBox/VBoxDDR0.r0
+%{_libdir}/VirtualBox/VMMR0.r0
+%{_libdir}/VirtualBox/additions/VBoxGuestAdditions.iso
+%{_libdir}/VirtualBox/components/VBoxC.so
+%{_libdir}/VirtualBox/components/VBoxDDU.so
+%{_libdir}/VirtualBox/components/VBoxREM.so
+%{_libdir}/VirtualBox/components/VBoxRT.so
+%{_libdir}/VirtualBox/components/VBoxSVCM.so
+%{_libdir}/VirtualBox/components/VBoxVMM.so
+%{_libdir}/VirtualBox/components/VBoxXPCOMBase.xpt
+%{_libdir}/VirtualBox/components/VBoxXPCOMIPCC.so
+%{_libdir}/VirtualBox/components/VBoxXPCOM.so
+%{_libdir}/VirtualBox/components/VirtualBox_XPCOM.xpt
 %{_libdir}/VirtualBox/rdesktop-vrdp-keymaps
 %{_libdir}/VirtualBox/License-7.html
 %{_libdir}/VirtualBox/VirtualBox.chm
@@ -404,6 +444,7 @@ fi
 %lang(sr) %{_libdir}/VirtualBox/nls/*_sr.qm
 %lang(sv) %{_libdir}/VirtualBox/nls/*_sv.qm
 %lang(tr) %{_libdir}/VirtualBox/nls/*_tr.qm
+%lang(uk) %{_libdir}/VirtualBox/nls/*_uk.qm
 %lang(zh_CN) %{_libdir}/VirtualBox/nls/*_zh_CN.qm
 %lang(zh_TW) %{_libdir}/VirtualBox/nls/*_zh_TW.qm
 %{_pixmapsdir}/VBox.png
