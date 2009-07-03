@@ -375,10 +375,9 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_6.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM.so
-%ifarch %{x8664}
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM64.so
-%else
+%ifarch %{ix86}
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM32.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM64.so
 %endif
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxRT.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSDL.so
