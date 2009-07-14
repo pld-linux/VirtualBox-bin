@@ -6,7 +6,7 @@
 
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	1
+%define		rel	2
 %ifarch %{x8664}
 %define		arch	amd64
 %else
@@ -244,7 +244,7 @@ install -d \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox/components
 
 install VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-for f in {VBox{Headless,Manage,Net{AdpCtl,DHCP},SDL,SysInfo.sh,SVC,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
+for f in {VBox{Headless,Manage,Net{AdpCtl,DHCP},SDL,SysInfo.sh,SVC,TestOGL,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
 	install $f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/$f
 done
 
@@ -359,6 +359,7 @@ fi
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxNetAdpCtl
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxNetDHCP
 %attr(4755,root,root) %{_libdir}/VirtualBox/VBoxSDL
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxTestOGL
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxTunctl
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMIPCD
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDbg.so
