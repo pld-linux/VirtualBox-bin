@@ -30,10 +30,11 @@ Source1:	UserManual.pdf
 # Source1-md5:	4d0b51c0c4759dc34c124083bae73436
 Source3:        %{pname}-vboxdrv.init
 Source4:        %{pname}-vboxadd.init
-Source5:        %{pname}-vboxnetflt.init
-Source6:        %{pname}-vboxvfs.init
-Source7:        %{pname}.desktop
-Source8:        %{pname}.sh
+Source5:        %{pname}-vboxnetadp.init
+Source6:        %{pname}-vboxnetflt.init
+Source7:        %{pname}-vboxvfs.init
+Source8:        %{pname}.desktop
+Source9:        %{pname}.sh
 URL:		http://www.virtualbox.org/
 %{?with_userspace:BuildRequires:	ffmpeg-libs}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -139,8 +140,25 @@ VirtualBox Support Driver.
 Moduł jądra Linuksa dla VirtualBoksa - sterownik wsparcia dla
 systemu głównego.
 
+%package -n kernel%{_alt_kernel}-misc-vboxnetadp
+Summary:	VirtualBox Linux Host Virtual Network Adapter Driver
+Release:	%{rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+Requires(post,postun):	/sbin/depmod
+Requires:	dev >= 2.9.0-7
+Requires:	kernel%{_alt_kernel}-misc-vboxdrv
+%if %{with dist_kernel}
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
+%endif
+Provides:	kernel(vboxnetadp) = %{version}-%{rel}
+
+%description -n kernel%{_alt_kernel}-misc-vboxnetadp
+This is a kernel module that creates a virtual interface that
+can be attached to an internal network.
+
 %package -n kernel%{_alt_kernel}-misc-vboxnetflt
-Summary:	VirtualBox Guest Additions for Linux Module
+Summary:	VirtualBox Linux Host Network Filter Driver
 Summary(pl.UTF-8):	Moduł jądra Linuksa dla VirtualBoksa
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
@@ -154,7 +172,8 @@ Requires(postun):	%releq_kernel
 Provides:	kernel(vboxnetflt) = %{version}-%{rel}
 
 %description -n kernel%{_alt_kernel}-misc-vboxnetflt
-VirtualBox Network Filter Driver.
+This is a kernel module that attaches to a real interface on the
+host and filters and injects packets.
 
 %description -n kernel%{_alt_kernel}-misc-vboxnetflt -l pl.UTF-8
 Moduł jądra Linuksa dla VirtualBoksa - sterownik filtrowania
@@ -215,20 +234,24 @@ Sterownik grafiki dla systemu gościa w VirtualBoksie.
 cat <<'EOF' > udev.conf
 KERNEL=="vboxdrv", NAME="%k", GROUP="vbox", MODE="0660"
 KERNEL=="vboxadd", NAME="%k", GROUP="vbox", MODE="0660"
+KERNEL=="vboxnetctl", NAME="%k", GROUP="vbox", MODE="0660"
 EOF
 
 install %{SOURCE1} .
-sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE8} > VirtualBox-wrapper.sh
+sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE9} > VirtualBox-wrapper.sh
 
 rm -rf PLD-MODULE-BUILD && mkdir PLD-MODULE-BUILD && cd PLD-MODULE-BUILD
 cp -rdf ../src/* ./
 sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxdrv/Makefile
+sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxnetadp/Makefile
 sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxnetflt/Makefile
 
 %build
 %if %{with kernel}
 cd PLD-MODULE-BUILD
 %build_kernel_modules -m vboxdrv -C vboxdrv
+cp -a vboxdrv/Module.symvers vboxnetadp/
+%build_kernel_modules -m vboxnetadp -C vboxnetadp
 cp -a vboxdrv/Module.symvers vboxnetflt/
 %build_kernel_modules -m vboxnetflt -C vboxnetflt
 cd ..
@@ -265,7 +288,7 @@ cp -a accessible additions components nls rdesktop-vrdp-keymaps $RPM_BUILD_ROOT%
 install License-7.html $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 install VBox.png $RPM_BUILD_ROOT%{_pixmapsdir}/VBox.png
-install %{SOURCE7} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
+install %{SOURCE8} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
 
 install VirtualBox.chm $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
@@ -280,8 +303,10 @@ install udev.conf $RPM_BUILD_ROOT/etc/udev/rules.d/virtualbox.rules
 %if %{with kernel}
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxdrv
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetflt
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetadp
+install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetflt
 %install_kernel_modules -m PLD-MODULE-BUILD/vboxdrv/vboxdrv -d misc
+%install_kernel_modules -m PLD-MODULE-BUILD/vboxnetadp/vboxnetadp -d misc
 %install_kernel_modules -m PLD-MODULE-BUILD/vboxnetflt/vboxnetflt -d misc
 %endif
 
@@ -321,6 +346,20 @@ fi
 if [ "$1" = "0" ]; then
 	%service vboxdrv stop
 	/sbin/chkconfig --del vboxdrv
+fi
+
+%post	-n kernel%{_alt_kernel}-misc-vboxnetadp
+%depmod %{_kernel_ver}
+/sbin/chkconfig --add vboxnetadp
+%service vboxnetadp restart "VirtualBox Network Adapter driver"
+
+%postun	-n kernel%{_alt_kernel}-misc-vboxnetadp
+%depmod %{_kernel_ver}
+
+%preun -n kernel%{_alt_kernel}-misc-vboxnetadp
+if [ "$1" = "0" ]; then
+	%service vboxnetadp stop
+	/sbin/chkconfig --del vboxnetadp
 fi
 
 %post	-n kernel%{_alt_kernel}-misc-vboxnetflt
@@ -465,6 +504,11 @@ fi
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/vboxdrv
 /lib/modules/%{_kernel_ver}/misc/vboxdrv.ko*
+
+%files -n kernel%{_alt_kernel}-misc-vboxnetadp
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/vboxnetadp
+/lib/modules/%{_kernel_ver}/misc/vboxnetadp.ko*
 
 %files -n kernel%{_alt_kernel}-misc-vboxnetflt
 %defattr(644,root,root,755)
