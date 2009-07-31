@@ -6,7 +6,7 @@
 
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	2
+%define		rel	3
 %ifarch %{x8664}
 %define		arch	amd64
 %else
