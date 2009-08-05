@@ -6,19 +6,19 @@
 
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	3
+%define		rel	1
 %ifarch %{x8664}
 %define		arch	amd64
 %else
 %define		arch	x86
 %endif
 
-%define		prev	49928
+%define		prev	50677
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.0.2
+Version:	3.0.4
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -27,7 +27,7 @@ Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
 #Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 Source1:	UserManual.pdf
-# Source1-md5:	4d0b51c0c4759dc34c124083bae73436
+# Source1-md5:	e37a6625c9048269112e96cc286aade0
 Source3:        %{pname}-vboxdrv.init
 Source4:        %{pname}-vboxadd.init
 Source5:        %{pname}-vboxnetadp.init
