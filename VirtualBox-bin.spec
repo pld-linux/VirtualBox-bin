@@ -13,7 +13,7 @@
 %define		arch	x86
 %endif
 
-%define		prev	52128
+%define		prev	52130
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
