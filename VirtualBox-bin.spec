@@ -9,11 +9,12 @@
 %define		rel	1
 %ifarch %{x8664}
 %define		arch	amd64
+%define		prev	52130
 %else
 %define		arch	x86
+%define		prev	52128
 %endif
 
-%define		prev	52130
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
