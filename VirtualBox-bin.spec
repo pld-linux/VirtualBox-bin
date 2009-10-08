@@ -8,18 +8,17 @@
 %define		_enable_debug_packages	0
 %define		rel	1
 %ifarch %{x8664}
-%define		arch	amd64
-%define		prev	52130
+%define                arch    amd64
 %else
-%define		arch	x86
-%define		prev	52128
+%define                arch    x86
 %endif
+%define		prev	53138
 
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.0.6
+Version:	3.0.8
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -29,13 +28,13 @@ NoSource:	0
 #Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 Source1:	UserManual.pdf
 # Source1-md5:	7b9dcaa2339f122db12228c6501c2176
-Source3:        %{pname}-vboxdrv.init
-Source4:        %{pname}-vboxadd.init
-Source5:        %{pname}-vboxnetadp.init
-Source6:        %{pname}-vboxnetflt.init
-Source7:        %{pname}-vboxvfs.init
-Source8:        %{pname}.desktop
-Source9:        %{pname}.sh
+Source3:	%{pname}-vboxdrv.init
+Source4:	%{pname}-vboxadd.init
+Source5:	%{pname}-vboxnetadp.init
+Source6:	%{pname}-vboxnetflt.init
+Source7:	%{pname}-vboxvfs.init
+Source8:	%{pname}.desktop
+Source9:	%{pname}.sh
 URL:		http://www.virtualbox.org/
 %{?with_userspace:BuildRequires:	ffmpeg-libs}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -118,8 +117,8 @@ Provides:	kernel(vboxadd) = %{version}-%{rel}
 VirtualBox Guest Additions for Linux Module.
 
 %description -n kernel%{_alt_kernel}-misc-vboxadd -l pl.UTF-8
-Moduł jądra Linuksa vboxadd dla VirtualBoksa - dodatki dla
-systemu gościa.
+Moduł jądra Linuksa vboxadd dla VirtualBoksa - dodatki dla systemu
+gościa.
 
 %package -n kernel%{_alt_kernel}-misc-vboxdrv
 Summary:	VirtualBox Support Driver
@@ -138,8 +137,8 @@ Provides:	kernel(vboxdrv) = %{version}-%{rel}
 VirtualBox Support Driver.
 
 %description -n kernel%{_alt_kernel}-misc-vboxdrv -l pl.UTF-8
-Moduł jądra Linuksa dla VirtualBoksa - sterownik wsparcia dla
-systemu głównego.
+Moduł jądra Linuksa dla VirtualBoksa - sterownik wsparcia dla systemu
+głównego.
 
 %package -n kernel%{_alt_kernel}-misc-vboxnetadp
 Summary:	VirtualBox Linux Host Virtual Network Adapter Driver
@@ -155,8 +154,8 @@ Requires(postun):	%releq_kernel
 Provides:	kernel(vboxnetadp) = %{version}-%{rel}
 
 %description -n kernel%{_alt_kernel}-misc-vboxnetadp
-This is a kernel module that creates a virtual interface that
-can be attached to an internal network.
+This is a kernel module that creates a virtual interface that can be
+attached to an internal network.
 
 %package -n kernel%{_alt_kernel}-misc-vboxnetflt
 Summary:	VirtualBox Linux Host Network Filter Driver
@@ -173,12 +172,12 @@ Requires(postun):	%releq_kernel
 Provides:	kernel(vboxnetflt) = %{version}-%{rel}
 
 %description -n kernel%{_alt_kernel}-misc-vboxnetflt
-This is a kernel module that attaches to a real interface on the
-host and filters and injects packets.
+This is a kernel module that attaches to a real interface on the host
+and filters and injects packets.
 
 %description -n kernel%{_alt_kernel}-misc-vboxnetflt -l pl.UTF-8
-Moduł jądra Linuksa dla VirtualBoksa - sterownik filtrowania
-sieci dla systemu głównego.
+Moduł jądra Linuksa dla VirtualBoksa - sterownik filtrowania sieci dla
+systemu głównego.
 
 %package -n kernel%{_alt_kernel}-misc-vboxvfs
 Summary:	Host file system access VFS for VirtualBox
@@ -198,8 +197,8 @@ Provides:	kernel(vboxvfs) = %{version}-%{rel}
 Host file system access VFS for VirtualBox.
 
 %description -n kernel%{_alt_kernel}-misc-vboxvfs -l pl.UTF-8
-Moduł jądra Linuksa dla VirtualBoksa - dostęp do plików
-systemu głównego z poziomu systemu gościa.
+Moduł jądra Linuksa dla VirtualBoksa - dostęp do plików systemu
+głównego z poziomu systemu gościa.
 
 %package -n xorg-driver-input-vboxmouse
 Summary:	X.org mouse driver for VirtualBox guest OS
