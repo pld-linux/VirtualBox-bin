@@ -25,9 +25,8 @@ Group:		Applications/Emulators
 #Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
-#Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-Source1:	UserManual.pdf
-# Source1-md5:	7b9dcaa2339f122db12228c6501c2176
+Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
+# Source1-md5:	e682baf64906a0d01bb592b81a3c54ac
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
@@ -473,6 +472,7 @@ fi
 %lang(eu) %{_libdir}/VirtualBox/nls/*_eu.qm
 %lang(fi) %{_libdir}/VirtualBox/nls/*_fi.qm
 %lang(fr) %{_libdir}/VirtualBox/nls/*_fr.qm
+%lang(gl_ES) %{_libdir}/VirtualBox/nls/*_gl_ES.qm
 %lang(hu) %{_libdir}/VirtualBox/nls/*_hu.qm
 %lang(id) %{_libdir}/VirtualBox/nls/*_id.qm
 %lang(it) %{_libdir}/VirtualBox/nls/*_it.qm
