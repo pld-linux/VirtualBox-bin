@@ -12,13 +12,13 @@
 %else
 %define                arch    x86
 %endif
-%define		prev	54655
+%define		prev	55467
 
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.0.12
+Version:	3.1.0
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -26,7 +26,7 @@ Group:		Applications/Emulators
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	ac742f57893b46bb9324ae008b716059
+# Source1-md5:	51a6eebe5fedc6ac386fe39c1fba5b98
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
@@ -420,7 +420,6 @@ fi
 %endif
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxRT.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSDL.so
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxSettings.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedClipboard.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedCrOpenGL.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedFolders.so
@@ -431,6 +430,7 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtCoreVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtGuiVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtNetworkVBox.so.4
+%attr(755,root,root) %{_libdir}/VirtualBox/libQtOpenGLVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/VRDPAuth.so
 %attr(4755,root,root) %{_libdir}/VirtualBox/VirtualBox
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox.so
@@ -467,6 +467,7 @@ fi
 %lang(bg) %{_libdir}/VirtualBox/nls/*_bg.qm
 %lang(ca) %{_libdir}/VirtualBox/nls/*_ca.qm
 %lang(cs) %{_libdir}/VirtualBox/nls/*_cs.qm
+%lang(da) %{_libdir}/VirtualBox/nls/*_da.qm
 %lang(de) %{_libdir}/VirtualBox/nls/*_de.qm
 %lang(es) %{_libdir}/VirtualBox/nls/*_es.qm
 %lang(eu) %{_libdir}/VirtualBox/nls/*_eu.qm
