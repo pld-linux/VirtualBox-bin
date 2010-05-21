@@ -50,7 +50,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define	_noautoreq	libavcodec.so.51 libavformat.so.51
 
 %description
-Sun VirtualBox is a general-purpose full virtualizer for x86 hardware.
+Oracle VirtualBox is a general-purpose full virtualizer for x86 hardware.
 Targeted at server, desktop and embedded use.
 
 Some of the features of VirtualBox are:
@@ -68,7 +68,7 @@ local machines. Virtual machine definitions can therefore easily be
 ported to other computers.
 
 %description -l pl.UTF-8
-Sun VirtualBox jest emulatorem sprzętu x86. Kierowany do zastosowań
+Oracle VirtualBox jest emulatorem sprzętu x86. Kierowany do zastosowań
 serwerowych, desktopowych oraz wbudowanych.
 
 Przykładowe cechy VirtualBoksa:
