@@ -12,13 +12,13 @@
 %else
 %define                arch    x86
 %endif
-%define		prev	61349
+%define		prev	61806
 
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.1.8
+Version:	3.2.0
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -284,7 +284,7 @@ for f in VBox{DDU,REM,RT,VMM,XPCOM}.so; do
 done
 
 cp -a accessible additions components nls rdesktop-vrdp-keymaps $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-install License-7.html $RPM_BUILD_ROOT%{_libdir}/VirtualBox
+install License-8.html $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 install VBox.png $RPM_BUILD_ROOT%{_pixmapsdir}/VBox.png
 install %{SOURCE8} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
@@ -404,6 +404,7 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDD2.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDD.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDDU.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxGuestControlSvc.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxGuestPropSvc.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxHeadless.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxKeyboard.so
@@ -462,7 +463,7 @@ fi
 %{_libdir}/VirtualBox/components/VBoxXPCOM.so
 %{_libdir}/VirtualBox/components/VirtualBox_XPCOM.xpt
 %{_libdir}/VirtualBox/rdesktop-vrdp-keymaps
-%{_libdir}/VirtualBox/License-7.html
+%{_libdir}/VirtualBox/License-8.html
 %{_libdir}/VirtualBox/VirtualBox.chm
 %lang(bg) %{_libdir}/VirtualBox/nls/*_bg.qm
 %lang(ca) %{_libdir}/VirtualBox/nls/*_ca.qm
