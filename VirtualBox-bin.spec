@@ -26,7 +26,7 @@ Group:		Applications/Emulators
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	20358abaedcacb1db3974826fa11f551
+# Source1-md5:	187f655c0df29a1e100bffc86cb1b918
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
