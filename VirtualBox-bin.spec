@@ -12,13 +12,13 @@
 %else
 %define                arch    x86
 %endif
-%define		prev	61806
+%define		prev	62298
 
 %define		pname	VirtualBox
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.2.0
+Version:	3.2.2
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -26,7 +26,7 @@ Group:		Applications/Emulators
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	09b98518de7eee5935aa4cc902195cbe
+# Source1-md5:	20358abaedcacb1db3974826fa11f551
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
@@ -50,8 +50,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define	_noautoreq	libavcodec.so.51 libavformat.so.51
 
 %description
-Oracle VirtualBox is a general-purpose full virtualizer for x86 hardware.
-Targeted at server, desktop and embedded use.
+Oracle VirtualBox is a general-purpose full virtualizer for x86
+hardware. Targeted at server, desktop and embedded use.
 
 Some of the features of VirtualBox are:
 
@@ -483,6 +483,7 @@ fi
 %lang(ja) %{_libdir}/VirtualBox/nls/*_ja.qm
 %lang(km_KH) %{_libdir}/VirtualBox/nls/*_km_KH.qm
 %lang(ko) %{_libdir}/VirtualBox/nls/*_ko.qm
+%lang(nl) %{_libdir}/VirtualBox/nls/*_nl.qm
 %lang(pl) %{_libdir}/VirtualBox/nls/*_pl.qm
 %lang(pt) %{_libdir}/VirtualBox/nls/*_pt.qm
 %lang(pt_BR) %{_libdir}/VirtualBox/nls/*_pt_BR.qm
