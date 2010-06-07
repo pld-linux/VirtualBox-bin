@@ -36,6 +36,7 @@ Source8:	%{pname}.desktop
 Source9:	%{pname}.sh
 URL:		http://www.virtualbox.org/
 %{?with_userspace:BuildRequires:	ffmpeg-libs}
+%{?with_kernel:BuildRequires:	kernel-module-build}
 BuildRequires:	rpmbuild(macros) >= 1.379
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
