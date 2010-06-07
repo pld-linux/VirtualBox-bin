@@ -2,8 +2,15 @@
 %bcond_without  dist_kernel     # without distribution kernel
 %bcond_without  kernel          # don't build kernel module
 %bcond_without  userspace       # don't build userspace package
+%bcond_with	force_userspace # force userspace build (useful if alt_kernel is set)
 %bcond_with     verbose 	# verbose kernel mod build
 
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
+%endif
+%if %{with force_userspace}
+%define		with_userspace 1
+%endif
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
 %define		rel	1
@@ -12,9 +19,10 @@
 %else
 %define                arch    x86
 %endif
-%define		prev	62298
 
 %define		pname	VirtualBox
+%define		prev	62298
+
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
@@ -36,7 +44,9 @@ Source8:	%{pname}.desktop
 Source9:	%{pname}.sh
 URL:		http://www.virtualbox.org/
 %{?with_userspace:BuildRequires:	ffmpeg-libs}
-%{?with_kernel:BuildRequires:	kernel-module-build}
+%if %{with kernel}
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.379
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
