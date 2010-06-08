@@ -21,12 +21,12 @@
 %endif
 
 %define		pname	VirtualBox
-%define		prev	62298
+%define		prev	62467
 
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.2.2
+Version:	3.2.4
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
@@ -34,7 +34,7 @@ Group:		Applications/Emulators
 Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	187f655c0df29a1e100bffc86cb1b918
+# Source1-md5:	9c3f21a2011aa4c041f146df90359470
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
