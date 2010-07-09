@@ -30,11 +30,11 @@ Version:	3.2.6
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
-#Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
-Source0:	%{pname}-%{version}-%{prev}-Linux_%{arch}.run
+Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
+# NoSource0-md5:	c88939c097f9e077b3941f5752b9e6d7
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	83793d20357353ef2588f2a93976d168
+# Source1-md5:	8891557360f816f7604d26aac7503489
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
