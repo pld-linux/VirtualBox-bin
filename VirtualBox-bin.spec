@@ -21,20 +21,20 @@
 %endif
 
 %define		pname	VirtualBox
-%define		prev	63112
+%define		prev	64453
 
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.2.6
+Version:	3.2.8
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
-# NoSource0-md5:	c88939c097f9e077b3941f5752b9e6d7
+# NoSource0-md5:	6bb3ab562162c3d6150f5183010ac5e2
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	8891557360f816f7604d26aac7503489
+# Source1-md5:	322feb471c55b81e95e0caecdc93efb0
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
@@ -42,6 +42,7 @@ Source6:	%{pname}-vboxnetflt.init
 Source7:	%{pname}-vboxvfs.init
 Source8:	%{pname}.desktop
 Source9:	%{pname}.sh
+Source10:	udev.rules
 URL:		http://www.virtualbox.org/
 %{?with_userspace:BuildRequires:	ffmpeg-libs}
 %if %{with kernel}
@@ -100,7 +101,6 @@ konfigurację maszyny wirtualnej na inny komputer.
 %package udev
 Summary:	udev rules for VirtualBox kernel modules
 Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla VirtualBoksa
-Release:	%{rel}
 Group:		Base/Kernel
 Requires:	udev-core
 
@@ -109,6 +109,30 @@ udev rules for VirtualBox kernel modules.
 
 %description udev -l pl.UTF-8
 Reguły udev dla modułów jądra Linuksa dla VirtualBoksa.
+
+%package -n xorg-driver-input-vboxmouse
+Summary:	X.org mouse driver for VirtualBox guest OS
+Summary(pl.UTF-8):	Sterownik myszy dla systemu gościa w VirtualBoksie
+Group:		X11/Applications
+Requires:	xorg-xserver-server >= 1.0.99.901
+
+%description -n xorg-driver-input-vboxmouse
+X.org mouse driver for VirtualBox guest OS.
+
+%description -n xorg-driver-input-vboxmouse  -l pl.UTF-8
+Sterownik myszy dla systemu gościa w VirtualBoksie.
+
+%package -n xorg-driver-video-vboxvideo
+Summary:	X.org video driver for VirtualBox guest OS
+Summary(pl.UTF-8):	Sterownik grafiki dla systemu gościa w VirtualBoksie
+Group:		X11/Applications
+Requires:	xorg-xserver-server >= 1.0.99.901
+
+%description -n xorg-driver-video-vboxvideo
+X.org video driver for VirtualBox guest OS.
+
+%description -n xorg-driver-video-vboxvideo -l pl.UTF-8
+Sterownik grafiki dla systemu gościa w VirtualBoksie.
 
 %package -n kernel%{_alt_kernel}-misc-vboxadd
 Summary:	VirtualBox Guest Additions for Linux Module
@@ -210,42 +234,10 @@ Host file system access VFS for VirtualBox.
 Moduł jądra Linuksa dla VirtualBoksa - dostęp do plików systemu
 głównego z poziomu systemu gościa.
 
-%package -n xorg-driver-input-vboxmouse
-Summary:	X.org mouse driver for VirtualBox guest OS
-Summary(pl.UTF-8):	Sterownik myszy dla systemu gościa w VirtualBoksie
-Release:	%{rel}
-Group:		X11/Applications
-Requires:	xorg-xserver-server >= 1.0.99.901
-
-%description -n xorg-driver-input-vboxmouse
-X.org mouse driver for VirtualBox guest OS.
-
-%description -n xorg-driver-input-vboxmouse  -l pl.UTF-8
-Sterownik myszy dla systemu gościa w VirtualBoksie.
-
-%package -n xorg-driver-video-vboxvideo
-Summary:	X.org video driver for VirtualBox guest OS
-Summary(pl.UTF-8):	Sterownik grafiki dla systemu gościa w VirtualBoksie
-Release:	%{rel}
-Group:		X11/Applications
-Requires:	xorg-xserver-server >= 1.0.99.901
-
-%description -n xorg-driver-video-vboxvideo
-X.org video driver for VirtualBox guest OS.
-
-%description -n xorg-driver-video-vboxvideo -l pl.UTF-8
-Sterownik grafiki dla systemu gościa w VirtualBoksie.
-
 %prep
 %setup -qcT
 %{__sh} %{SOURCE0} --noexec --keep
 %{__tar} -jxf install/VirtualBox.tar.bz2
-
-cat <<'EOF' > udev.conf
-KERNEL=="vboxdrv", NAME="%k", GROUP="vbox", MODE="0660"
-KERNEL=="vboxadd", NAME="%k", GROUP="vbox", MODE="0660"
-KERNEL=="vboxnetctl", NAME="%k", GROUP="vbox", MODE="0660"
-EOF
 
 install %{SOURCE1} .
 sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE9} > VirtualBox-wrapper.sh
@@ -307,7 +299,7 @@ ln -s %{_libdir}/libavcodec.so.5? $RPM_BUILD_ROOT%{_libdir}/VirtualBox/libavcode
 ln -s %{_libdir}/libavformat.so.5? $RPM_BUILD_ROOT%{_libdir}/VirtualBox/libavformat.so.51
 
 install -d $RPM_BUILD_ROOT/etc/udev/rules.d
-install udev.conf $RPM_BUILD_ROOT/etc/udev/rules.d/virtualbox.rules
+cp -a %{SOURCE10} $RPM_BUILD_ROOT/etc/udev/rules.d/virtualbox.rules
 %endif
 
 %if %{with kernel}
@@ -494,6 +486,7 @@ fi
 %lang(ja) %{_libdir}/VirtualBox/nls/*_ja.qm
 %lang(km_KH) %{_libdir}/VirtualBox/nls/*_km_KH.qm
 %lang(ko) %{_libdir}/VirtualBox/nls/*_ko.qm
+%lang(lt) %{_libdir}/VirtualBox/nls/*_lt.qm
 %lang(nl) %{_libdir}/VirtualBox/nls/*_nl.qm
 %lang(pl) %{_libdir}/VirtualBox/nls/*_pl.qm
 %lang(pt) %{_libdir}/VirtualBox/nls/*_pt.qm
