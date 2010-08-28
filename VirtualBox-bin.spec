@@ -415,7 +415,13 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhostcrutil.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhosterrorspu.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLrenderspu.so
+
+%if "%{pld_release}" == "ti"
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_6.so
+%else
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
+%endif
+
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM.so
 %ifarch %{ix86}
