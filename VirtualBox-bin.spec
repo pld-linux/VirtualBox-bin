@@ -13,7 +13,7 @@
 %endif
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	1
+%define		rel	2
 %ifarch %{x8664}
 %define                arch    amd64
 %else
@@ -415,7 +415,7 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhostcrutil.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhosterrorspu.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLrenderspu.so
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_6.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM.so
 %ifarch %{ix86}
