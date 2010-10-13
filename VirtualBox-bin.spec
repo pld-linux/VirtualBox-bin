@@ -244,13 +244,13 @@ sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE9} > VirtualBox-wrapper.sh
 
 rm -rf PLD-MODULE-BUILD && mkdir PLD-MODULE-BUILD && cd PLD-MODULE-BUILD
 cp -rdf ../src/* ./
-sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxdrv/Makefile
-sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxnetadp/Makefile
-sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxnetflt/Makefile
+sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxhost/vboxdrv/Makefile
+sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxhost/vboxnetadp/Makefile
+sed -i -e 's/-DVBOX_WITH_HARDENING//g' vboxhost/vboxnetflt/Makefile
 
 %build
 %if %{with kernel}
-cd PLD-MODULE-BUILD
+cd PLD-MODULE-BUILD/vboxhost
 %build_kernel_modules -m vboxdrv -C vboxdrv
 cp -a vboxdrv/Module.symvers vboxnetadp/
 %build_kernel_modules -m vboxnetadp -C vboxnetadp
@@ -307,9 +307,9 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxdrv
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetadp
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetflt
-%install_kernel_modules -m PLD-MODULE-BUILD/vboxdrv/vboxdrv -d misc
-%install_kernel_modules -m PLD-MODULE-BUILD/vboxnetadp/vboxnetadp -d misc
-%install_kernel_modules -m PLD-MODULE-BUILD/vboxnetflt/vboxnetflt -d misc
+%install_kernel_modules -m PLD-MODULE-BUILD/vboxhost/vboxdrv/vboxdrv -d misc
+%install_kernel_modules -m PLD-MODULE-BUILD/vboxhost/vboxnetadp/vboxnetadp -d misc
+%install_kernel_modules -m PLD-MODULE-BUILD/vboxhost/vboxnetflt/vboxnetflt -d misc
 %endif
 
 %clean
