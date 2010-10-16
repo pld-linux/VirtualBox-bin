@@ -14,11 +14,6 @@
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
 %define		rel	1
-%ifarch %{x8664}
-%define                arch    amd64
-%else
-%define                arch    x86
-%endif
 
 %define		pname	VirtualBox
 %define		prev	66523
@@ -30,11 +25,14 @@ Version:	3.2.10
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
-Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_%{arch}.run
-# NoSource0-md5:	a72291e91d521f879338559954ac8b08
+Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_amd64.run
+# NoSource0-md5:	4f6303fe7680bd70f49bc96a770c2bf4
 NoSource:	0
-Source1:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source1-md5:	370bb3e893acffa584536c8f9e966c79
+Source1:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_x86.run
+# NoSource1-md5:	a72291e91d521f879338559954ac8b08
+NoSource:	1
+Source2:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
+# Source2-md5:	370bb3e893acffa584536c8f9e966c79
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
@@ -236,10 +234,15 @@ głównego z poziomu systemu gościa.
 
 %prep
 %setup -qcT
+%ifarch %{x8664}
 %{__sh} %{SOURCE0} --noexec --keep
+%else
+%{__sh} %{SOURCE1} --noexec --keep
+%endif
+
 %{__tar} -jxf install/VirtualBox.tar.bz2
 
-install %{SOURCE1} .
+install %{SOURCE2} .
 sed 's#@LIBDIR@#%{_libdir}#' < %{SOURCE9} > VirtualBox-wrapper.sh
 
 rm -rf PLD-MODULE-BUILD && mkdir PLD-MODULE-BUILD && cd PLD-MODULE-BUILD
