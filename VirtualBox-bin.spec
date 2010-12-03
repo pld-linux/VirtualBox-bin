@@ -16,23 +16,23 @@
 %define		rel	1
 
 %define		pname	VirtualBox
-%define		prev	66523
+%define		prev	68302
 
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.2.10
+Version:	3.2.12
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_amd64.run
-# NoSource0-md5:	4f6303fe7680bd70f49bc96a770c2bf4
+# NoSource0-md5:	408db0aff4ada9664b8cdf156916ec64
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_x86.run
-# NoSource1-md5:	a72291e91d521f879338559954ac8b08
+# NoSource1-md5:	984b2dea108ba151ee5203f95987463c
 NoSource:	1
 Source2:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source2-md5:	370bb3e893acffa584536c8f9e966c79
+# Source2-md5:	d7f8685fe5fd84757b33d46e6f0b6bc5
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
