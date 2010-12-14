@@ -13,7 +13,7 @@
 %endif
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	1
+%define		rel	2
 
 %define		pname	VirtualBox
 %define		prev	68302
@@ -420,7 +420,7 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLrenderspu.so
 
 %if "%{pld_release}" == "ti"
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_6.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
 %else
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
 %endif
