@@ -101,6 +101,7 @@ Summary:	udev rules for VirtualBox kernel modules
 Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla VirtualBoksa
 Group:		Base/Kernel
 Requires:	udev-core
+Conflicts:	%{pname}-udev
 
 %description udev
 udev rules for VirtualBox kernel modules.
