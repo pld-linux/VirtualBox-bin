@@ -13,26 +13,26 @@
 %endif
 # disable debug - no symbols here
 %define		_enable_debug_packages	0
-%define		rel	2
+%define		rel	1
 
 %define		pname	VirtualBox
-%define		prev	68302
+%define		prev	71344
 
 Summary:	VirtualBox - x86 hardware virtualizer
 Summary(pl.UTF-8):	VirtualBox - wirtualizator sprzętu x86
 Name:		%{pname}-bin
-Version:	3.2.12
+Version:	4.0.6
 Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_amd64.run
-# NoSource0-md5:	408db0aff4ada9664b8cdf156916ec64
+# NoSource0-md5:	133cfbb8dc11da780b24f1ef5ef06697
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_x86.run
-# NoSource1-md5:	984b2dea108ba151ee5203f95987463c
+# NoSource1-md5:	45414b45e5b43e95068b1f3fec71de76
 NoSource:	1
 Source2:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
-# Source2-md5:	d7f8685fe5fd84757b33d46e6f0b6bc5
+# Source2-md5:	7d3ee86e998fa24b07a157add9fb7766
 Source3:	%{pname}-vboxdrv.init
 Source4:	%{pname}-vboxadd.init
 Source5:	%{pname}-vboxnetadp.init
@@ -281,7 +281,7 @@ for f in {VBox{Headless,Manage,SDL,VRDP},VirtualBox,rdesktop-vrdp,vboxwebsrv}; d
 	ln -s %{_libdir}/VirtualBox/VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/$f
 done
 
-install libQt*.so.* VBox*.so VirtualBox.so VRDPAuth.so \
+install libQt*.so.* VBox*.so VirtualBox.so \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 install VBox{DD,DD2}{GC.gc,R0.r0} VMM{GC.gc,R0.r0} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
@@ -291,7 +291,6 @@ for f in VBox{DDU,REM,RT,VMM,XPCOM}.so; do
 done
 
 cp -a accessible additions components nls rdesktop-vrdp-keymaps $RPM_BUILD_ROOT%{_libdir}/VirtualBox
-install License-8.html $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 install VBox.png $RPM_BUILD_ROOT%{_pixmapsdir}/VBox.png
 install %{SOURCE8} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
@@ -407,6 +406,8 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxTestOGL
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxTunctl
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMIPCD
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxAuth.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxAuthSimple.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDbg.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDD2.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxDD.so
@@ -419,14 +420,8 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhostcrutil.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhosterrorspu.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLrenderspu.so
-
-%if "%{pld_release}" == "ti"
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
-%else
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
-%endif
-
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM.so
 %ifarch %{ix86}
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM32.so
@@ -438,14 +433,12 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedCrOpenGL.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxSharedFolders.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxVMM.so
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxVRDP.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOMC.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxXPCOM.so
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtCoreVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtGuiVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtNetworkVBox.so.4
 %attr(755,root,root) %{_libdir}/VirtualBox/libQtOpenGLVBox.so.4
-%attr(755,root,root) %{_libdir}/VirtualBox/VRDPAuth.so
 %attr(4755,root,root) %{_libdir}/VirtualBox/VirtualBox
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VirtualBox-wrapper.sh
@@ -476,7 +469,6 @@ fi
 %{_libdir}/VirtualBox/components/VBoxXPCOM.so
 %{_libdir}/VirtualBox/components/VirtualBox_XPCOM.xpt
 %{_libdir}/VirtualBox/rdesktop-vrdp-keymaps
-%{_libdir}/VirtualBox/License-8.html
 %{_libdir}/VirtualBox/VirtualBox.chm
 %lang(bg) %{_libdir}/VirtualBox/nls/*_bg.qm
 %lang(ca) %{_libdir}/VirtualBox/nls/*_ca.qm
