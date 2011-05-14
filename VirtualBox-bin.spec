@@ -272,18 +272,18 @@ install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox/components
 
-install VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_libdir}/VirtualBox
+install -p VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 for f in {VBox{Headless,Manage,Net{AdpCtl,DHCP},SDL,SysInfo.sh,SVC,TestOGL,Tunctl,XPCOMIPCD,.sh},VirtualBox,rdesktop-vrdp,vboxwebsrv,webtest}; do
-	install $f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/$f
+	install -p $f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/$f
 done
 
 for f in {VBox{Headless,Manage,SDL,VRDP},VirtualBox,rdesktop-vrdp,vboxwebsrv}; do
 	ln -s %{_libdir}/VirtualBox/VirtualBox-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/$f
 done
 
-install libQt*.so.* VBox*.so VirtualBox.so \
+install -p libQt*.so.* VBox*.so VirtualBox.so \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
-install VBox{DD,DD2}{GC.gc,R0.r0} VMM{GC.gc,R0.r0} \
+install -p VBox{DD,DD2}{GC.gc,R0.r0} VMM{GC.gc,R0.r0} \
 	$RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 for f in VBox{DDU,REM,RT,VMM,XPCOM}.so; do
@@ -292,24 +292,29 @@ done
 
 cp -a accessible additions components nls rdesktop-vrdp-keymaps $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
-install VBox.png $RPM_BUILD_ROOT%{_pixmapsdir}/VBox.png
-install %{SOURCE8} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
+cp -p VBox.png $RPM_BUILD_ROOT%{_pixmapsdir}/VBox.png
+cp -p %{SOURCE8} $RPM_BUILD_ROOT%{_desktopdir}/%{pname}.desktop
 
-install VirtualBox.chm $RPM_BUILD_ROOT%{_libdir}/VirtualBox
+cp -p VirtualBox.chm $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 
 # required by VBoxFFmpegFB.so
 ln -s %{_libdir}/libavcodec.so.5? $RPM_BUILD_ROOT%{_libdir}/VirtualBox/libavcodec.so.51
 ln -s %{_libdir}/libavformat.so.5? $RPM_BUILD_ROOT%{_libdir}/VirtualBox/libavformat.so.51
 
 install -d $RPM_BUILD_ROOT/etc/udev/rules.d
-cp -a %{SOURCE10} $RPM_BUILD_ROOT/etc/udev/rules.d/virtualbox.rules
+cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/udev/rules.d/virtualbox.rules
+
+# install just for current python
+py_ver=$(%{__python} -c 'import sys; sv=sys.version_info; print "%s_%s" % (sv.major, sv.minor)')
+rm -f $RPM_BUILD_ROOT%{_libdir}/VirtualBox/VBoxPython*.so
+install -p VBoxPython.so VBoxPython$py_ver.so $RPM_BUILD_ROOT%{_libdir}/VirtualBox
 %endif
 
 %if %{with kernel}
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxdrv
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetadp
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetflt
+install -p %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxdrv
+install -p %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetadp
+install -p %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/vboxnetflt
 %install_kernel_modules -m PLD-MODULE-BUILD/vboxhost/vboxdrv/vboxdrv -d misc
 %install_kernel_modules -m PLD-MODULE-BUILD/vboxhost/vboxnetadp/vboxnetadp -d misc
 %install_kernel_modules -m PLD-MODULE-BUILD/vboxhost/vboxnetflt/vboxnetflt -d misc
@@ -420,8 +425,7 @@ fi
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhostcrutil.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLhosterrorspu.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxOGLrenderspu.so
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython.so
-%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython2_7.so
+%attr(755,root,root) %{_libdir}/VirtualBox/VBoxPython*.so
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM.so
 %ifarch %{ix86}
 %attr(755,root,root) %{_libdir}/VirtualBox/VBoxREM32.so
