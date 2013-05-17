@@ -26,10 +26,10 @@ Release:	%{rel}
 License:	Free for non-commercial use, non-distributable
 Group:		Applications/Emulators
 Source0:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_amd64.run
-# NoSourceSource0-md5:	
+# NoSource0-md5:
 NoSource:	0
 Source1:	http://download.virtualbox.org/virtualbox/%{version}/%{pname}-%{version}-%{prev}-Linux_x86.run
-# NoSourceSource1-md5:	
+# NoSource1-md5:
 NoSource:	1
 Source2:	http://download.virtualbox.org/virtualbox/%{version}/UserManual.pdf
 # Source2-md5:	d41d8cd98f00b204e9800998ecf8427e
